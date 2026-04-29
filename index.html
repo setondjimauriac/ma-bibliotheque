@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SETONDJI Bibliothèque — Livres Informatiques en Ligne</title>
+  <meta name="description" content="Accédez aux meilleurs livres informatiques en ligne. Lecture gratuite et immédiate."/>
+  <meta property="og:title" content="SETONDJI Bibliothèque — Livres Informatiques"/>
+  <meta property="og:description" content="Lisez les meilleurs livres informatiques en ligne. Accès gratuit."/>
+  <meta property="og:url" content="https://setondjimauriac.github.io/ma-bibliotheque/"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; frame-src *; img-src * data:;">
+  <!-- PDF.js supprimé — on utilise Google Drive Preview (iframe) -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #faf7f2;
+      --surface:  #fff;
+      --dark:     #1a1408;
+      --brown:    #8b5e3c;
+      --gold:     #c9963a;
+      --gold-lt:  #f0d090;
+      --green:    #2d6a4f;
+      --red:      #c0392b;
+      --border:   #e8e0d0;
+      --muted:    #8a7f70;
+      --text:     #2c2416;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Sora', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--dark);
+      padding: 1rem 3rem;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 200;
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; color: var(--gold-lt);
+      letter-spacing: .02em;
+    }
+    .logo span { color: var(--gold); }
+    .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-tag {
+      font-size: .7rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--muted); border: 1px solid #3a3020; padding: .3rem .8rem;
+    }
+    .moov-badge {
+      background: #00a859; color: #fff;
+      font-size: .7rem; font-weight: 600; letter-spacing: .08em;
+      padding: .3rem .9rem; border-radius: 20px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--dark);
+      padding: 5rem 3rem 4rem;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 100%, rgba(201,150,58,.15), transparent);
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: .68rem; letter-spacing: .25em; text-transform: uppercase;
+      padding: .3rem 1.2rem; margin-bottom: 1.8rem;
+      animation: fadeUp .5s ease both;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      color: #fff; line-height: 1.1;
+      animation: fadeUp .5s .1s ease both;
+    }
+    .hero h1 em { color: var(--gold); font-style: italic; }
+    .hero-sub {
+      color: #a09080; font-size: .95rem; margin-top: 1.2rem; line-height: 1.7;
+      max-width: 520px; margin-inline: auto;
+      animation: fadeUp .5s .2s ease both;
+    }
+    .hero-steps {
+      margin-top: 3rem;
+      display: flex; justify-content: center; gap: 0; flex-wrap: wrap;
+      animation: fadeUp .5s .3s ease both;
+    }
+    .step {
+      display: flex; align-items: center; gap: .8rem;
+      padding: .8rem 1.5rem;
+      border: 1px solid #2a2010;
+      background: rgba(255,255,255,.03);
+    }
+    .step-num {
+      width: 28px; height: 28px; min-width: 28px;
+      background: var(--gold); color: #000;
+      font-weight: 700; font-size: .8rem;
+      display: grid; place-items: center; border-radius: 50%;
+    }
+    .step-txt { font-size: .78rem; color: #c0b090; text-align: left; }
+
+    /* ── CATALOGUE ── */
+    .catalogue {
+      padding: 5rem 3rem;
+      max-width: 1200px; margin-inline: auto;
+    }
+    .cat-header { text-align: center; margin-bottom: 3rem; }
+    .cat-label { font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: .8rem; }
+    .cat-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem); color: var(--dark);
+    }
+    .cat-title em { color: var(--brown); font-style: italic; }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 2rem;
+    }
+
+    .book-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: transform .25s, box-shadow .25s;
+      cursor: pointer;
+      animation: fadeUp .5s ease both;
+    }
+    .book-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,.12); }
+
+    .book-cover {
+      height: 200px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      font-size: 4rem;
+    }
+    .book-cover-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(0,0,0,.3), transparent);
+    }
+    .book-cover-label {
+      position: absolute; top: .8rem; right: .8rem;
+      background: var(--gold); color: #000;
+      font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      padding: .25rem .6rem;
+    }
+
+    .book-body { padding: 1.4rem; }
+    .book-cat {
+      font-size: .62rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--brown); margin-bottom: .5rem;
+    }
+    .book-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; color: var(--dark); line-height: 1.3; margin-bottom: .4rem;
+    }
+    .book-author { font-size: .75rem; color: var(--muted); margin-bottom: 1rem; }
+    .book-desc { font-size: .75rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.2rem; }
+
+    .book-footer { display: flex; align-items: center; justify-content: space-between; }
+    .book-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; color: var(--dark);
+    }
+    .book-price small { font-family: 'Sora', sans-serif; font-size: .7rem; color: var(--muted); font-weight: 400; }
+
+    .btn-lire {
+      background: var(--dark); color: var(--gold-lt);
+      border: none; padding: .6rem 1.2rem;
+      font-family: 'Sora', sans-serif; font-size: .75rem; font-weight: 600;
+      letter-spacing: .08em; text-transform: uppercase;
+      cursor: pointer; transition: background .2s;
+    }
+    .btn-lire:hover { background: var(--gold); color: #000; }
+
+    /* ── MODAL OVERLAY ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(10,8,4,.85); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center; padding: 1.5rem;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      width: 100%; max-width: 480px;
+      border-top: 4px solid var(--gold);
+      animation: fadeUp .3s ease;
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal-head {
+      padding: 1.8rem 2rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .modal-head-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; color: var(--dark);
+    }
+    .modal-head-sub { font-size: .75rem; color: var(--muted); margin-top: .2rem; }
+    .modal-close {
+      background: none; border: none; font-size: 1.4rem; cursor: pointer;
+      color: var(--muted); padding: 0 .2rem; transition: color .2s;
+    }
+    .modal-close:hover { color: var(--dark); }
+
+    .modal-body { padding: 1.8rem 2rem; }
+    .modal-price-box {
+      background: #f5f0e8; border: 1px solid var(--gold-lt);
+      padding: 1rem 1.2rem; margin-bottom: 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .modal-price-label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
+    .modal-price-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; color: var(--dark);
+    }
+
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label {
+      display: block; font-size: .7rem; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: .4rem;
+    }
+    .form-group input {
+      width: 100%; background: var(--bg);
+      border: 1px solid var(--border); padding: .75rem 1rem;
+      font-family: 'Sora', sans-serif; font-size: .85rem; color: var(--text);
+      outline: none; transition: border-color .2s;
+    }
+    .form-group input:focus { border-color: var(--gold); }
+
+    .moov-info {
+      background: #e8f5ee; border: 1px solid #b2dfcc;
+      padding: 1rem 1.2rem; margin-bottom: 1.5rem;
+      font-size: .78rem; color: var(--green); line-height: 1.6;
+    }
+    .moov-info strong { display: block; margin-bottom: .3rem; font-size: .82rem; }
+
+    .btn-pay {
+      width: 100%; background: #00a859; color: #fff;
+      border: none; padding: 1rem;
+      font-family: 'Sora', sans-serif; font-size: .9rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      cursor: pointer; transition: background .2s;
+    }
+    .btn-pay:hover { background: #007a42; }
+    .btn-pay:disabled { background: #ccc; cursor: not-allowed; }
+
+    .modal-note {
+      text-align: center; font-size: .68rem; color: var(--muted);
+      margin-top: 1rem; line-height: 1.6;
+    }
+
+    /* ── READER OVERLAY ── */
+    .reader-overlay {
+      display: none; position: fixed; inset: 0; z-index: 600;
+      background: #111;
+      flex-direction: column;
+    }
+    .reader-overlay.open { display: flex; }
+
+    .reader-toolbar {
+      background: var(--dark); padding: .8rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 2px solid var(--gold);
+    }
+    .reader-title {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold-lt); font-size: 1rem;
+    }
+    .reader-controls { display: flex; gap: .8rem; align-items: center; }
+    .reader-btn {
+      background: #2a2010; border: 1px solid #3a3020; color: #c0b090;
+      padding: .4rem .9rem; font-family: 'Sora', sans-serif;
+      font-size: .75rem; cursor: pointer; transition: background .2s;
+    }
+    .reader-btn:hover { background: var(--gold); color: #000; }
+    .btn-close-reader {
+      background: var(--red); color: #fff;
+      border: none; padding: .4rem 1rem;
+      font-family: 'Sora', sans-serif; font-size: .75rem; font-weight: 600;
+      cursor: pointer;
+    }
+
+    .reader-content {
+      flex: 1; overflow-y: auto;
+      padding: 0;
+    }
+
+    /* PDF viewer */
+    .pdf-container { width: 100%; max-width: 800px; margin-inline: auto; }
+    .pdf-page {
+      background: #fff; margin-bottom: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,.5);
+    }
+
+    /* Text reader */
+    .text-reader {
+      max-width: 700px; margin-inline: auto;
+      background: #faf8f3; padding: 3rem;
+      min-height: 100%;
+    }
+    .text-reader h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; color: var(--dark); margin-bottom: .5rem;
+    }
+    .text-reader .chapter {
+      font-size: .7rem; color: var(--gold); letter-spacing: .15em;
+      text-transform: uppercase; margin-bottom: 2rem;
+    }
+    .text-reader p {
+      font-size: 1rem; line-height: 1.9; color: #333;
+      margin-bottom: 1.4rem; text-align: justify;
+    }
+    .text-reader h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; color: var(--dark);
+      margin: 2.5rem 0 1rem; border-left: 3px solid var(--gold); padding-left: 1rem;
+    }
+    .text-reader code {
+      background: #f0ece0; padding: .15rem .5rem;
+      font-size: .88rem; border-radius: 3px; font-family: monospace;
+    }
+    .text-reader pre {
+      background: #1a1408; color: #e0d8c0;
+      padding: 1.5rem; margin: 1.5rem 0;
+      font-size: .82rem; line-height: 1.6; overflow-x: auto;
+      border-left: 3px solid var(--gold);
+    }
+
+    /* ── ANTI-CAPTURE CSS ── */
+    .reader-content * {
+      pointer-events: none;
+    }
+    .reader-content a { pointer-events: auto; }
+
+    /* ── WATERMARK ── */
+    .watermark {
+      position: fixed; inset: 0; z-index: 1;
+      pointer-events: none;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .watermark-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem; color: rgba(201,150,58,.06);
+      transform: rotate(-35deg);
+      white-space: nowrap; user-select: none;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark); color: #706050;
+      padding: 2rem 3rem;
+      text-align: center; font-size: .75rem; line-height: 1.8;
+    }
+    footer strong { color: var(--gold-lt); }
+
+    /* ── UTILS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .book-card:nth-child(1) { animation-delay: .05s; }
+    .book-card:nth-child(2) { animation-delay: .1s; }
+    .book-card:nth-child(3) { animation-delay: .15s; }
+    .book-card:nth-child(4) { animation-delay: .2s; }
+    .book-card:nth-child(5) { animation-delay: .25s; }
+    .book-card:nth-child(6) { animation-delay: .3s; }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.2rem; }
+      .hero { padding: 3.5rem 1.2rem 3rem; }
+      .hero-steps { flex-direction: column; align-items: center; }
+      .step { width: 100%; max-width: 320px; }
+      .catalogue { padding: 3rem 1.2rem; }
+    }
+
+    /* Disable print */
+    @media print { body { display: none !important; } }
+  
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">SETONDJI <span>Bibliothèque</span></div>
+  <div class="nav-right">
+    <div class="nav-tag">📚 Livres Informatiques</div>
+    <div class="moov-badge" style="background:#2d6a4f;">Accès Gratuit ✓</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Bibliothèque Numérique · Bénin</div>
+  <h1>Apprenez l'informatique<br/>avec les <em>meilleurs livres</em></h1>
+  <p class="hero-sub">Renseignez vos informations et accédez immédiatement à nos livres. Lecture en ligne, sans téléchargement.</p>
+  <div class="hero-steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-txt">Choisissez un livre<br/>dans le catalogue</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-txt">Renseignez vos<br/>informations</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-txt">Accès immédiat<br/>au contenu</div>
+    </div>
+  </div>
+</section>
+
+<!-- CATALOGUE -->
+<div class="catalogue">
+  <div class="cat-header">
+    <div class="cat-label">// Catalogue disponible</div>
+    <h2 class="cat-title">Nos <em>livres</em> informatiques</h2>
+  </div>
+
+  <div class="books-grid" id="books-grid">
+
+    <!-- LIVRE 1 : Python -->
+    <div class="book-card">
+      <div class="book-cover" style="background:#1a3a5c;">
+        <span style="position:relative;z-index:1;font-size:4rem;">🐍</span>
+        <div class="book-cover-overlay"></div>
+        <div class="book-cover-label">Bestseller</div>
+      </div>
+      <div class="book-body">
+        <div class="book-cat">Programmation</div>
+        <div class="book-title">Python</div>
+        <div class="book-author">par Auteur à définir</div>
+        <div class="book-desc">Apprenez Python de zéro : variables, boucles, fonctions, fichiers et projets pratiques.</div>
+        <div class="book-footer">
+          <div class="book-price">1 500 <small>FCFA</small></div>
+          <button class="btn-lire" onclick="ouvrirModal('livre-001')">Accéder →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVRE 2 : XML -->
+    <div class="book-card">
+      <div class="book-cover" style="background:#4a1a6b;">
+        <span style="position:relative;z-index:1;font-size:4rem;">📄</span>
+        <div class="book-cover-overlay"></div>
+        <div class="book-cover-label">Nouveau</div>
+      </div>
+      <div class="book-body">
+        <div class="book-cat">Langages & Formats</div>
+        <div class="book-title">XML</div>
+        <div class="book-author">par Auteur à définir</div>
+        <div class="book-desc">Maîtrisez XML : structure, syntaxe, DTD, XPath, XSLT et intégration dans vos projets.</div>
+        <div class="book-footer">
+          <div class="book-price">1 200 <small>FCFA</small></div>
+          <button class="btn-lire" onclick="ouvrirModal('livre-002')">Accéder →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVRE 3 : POO et Java -->
+    <div class="book-card">
+      <div class="book-cover" style="background:#1a3a1a;">
+        <span style="position:relative;z-index:1;font-size:4rem;">☕</span>
+        <div class="book-cover-overlay"></div>
+        <div class="book-cover-label">Populaire</div>
+      </div>
+      <div class="book-body">
+        <div class="book-cat">Programmation Orientée Objet</div>
+        <div class="book-title">POO et Java</div>
+        <div class="book-author">par Auteur à définir</div>
+        <div class="book-desc">Programmation Orientée Objet avec Java : classes, héritage, polymorphisme, interfaces et patterns.</div>
+        <div class="book-footer">
+          <div class="book-price">2 000 <small>FCFA</small></div>
+          <button class="btn-lire" onclick="ouvrirModal('livre-003')">Accéder →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVRE 4 : Théorie Informatique -->
+    <div class="book-card">
+      <div class="book-cover" style="background:#5c3a1a;">
+        <span style="position:relative;z-index:1;font-size:4rem;">🧠</span>
+        <div class="book-cover-overlay"></div>
+      </div>
+      <div class="book-body">
+        <div class="book-cat">Informatique Théorique</div>
+        <div class="book-title">Théorie Informatique</div>
+        <div class="book-author">par Auteur à définir</div>
+        <div class="book-desc">Fondements théoriques de l'informatique : automates, langages formels, complexité et calculabilité.</div>
+        <div class="book-footer">
+          <div class="book-price">1 800 <small>FCFA</small></div>
+          <button class="btn-lire" onclick="ouvrirModal('livre-004')">Accéder →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVRE 5 : Algorithmique Avancée -->
+    <div class="book-card">
+      <div class="book-cover" style="background:#1a2a4a;">
+        <span style="position:relative;z-index:1;font-size:4rem;">📘</span>
+        <div class="book-cover-overlay"></div>
+        <div class="book-cover-label">Avancé</div>
+      </div>
+      <div class="book-body">
+        <div class="book-cat">Algorithmique</div>
+        <div class="book-title">Algorithmique Avancée</div>
+        <div class="book-author">par Auteur à définir</div>
+        <div class="book-desc">Structures de données, tri, recherche, graphes et optimisation. Le guide complet des algorithmes.</div>
+        <div class="book-footer">
+          <div class="book-price">2 500 <small>FCFA</small></div>
+          <button class="btn-lire" onclick="ouvrirModal('livre-005')">Accéder →</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <strong>SETONDJI Bibliothèque</strong> — Bibliothèque numérique<br/>
+  Accès gratuit · Lecture en ligne uniquement · Contenu protégé<br/>
+  Contact : <strong>setondjimauriac@gmail.com</strong> · Tel : <strong>68142852</strong>
+</footer>
+
+<!-- MODAL PAIEMENT -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-head-title" id="modal-title">Titre du livre</div>
+        <div class="modal-head-sub">Remplissez le formulaire pour accéder gratuitement</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-price-box" style="background:#e8f5ee; border-color:#b2dfcc;">
+        <div>
+          <div class="modal-price-label" style="color:#2d6a4f;">Accès gratuit</div>
+          <div style="font-size:.72rem; color:#2d6a4f; margin-top:.2rem;">Remplissez le formulaire pour lire</div>
+        </div>
+        <div class="modal-price-val" style="color:#2d6a4f;">📖 Gratuit</div>
+      </div>
+
+      <div class="form-group">
+        <label>Nom *</label>
+        <input type="text" id="inp-nom" placeholder="Ex : KPOTA" required/>
+      </div>
+      <div class="form-group">
+        <label>Prénom *</label>
+        <input type="text" id="inp-prenom" placeholder="Ex : Rodrigue" required/>
+      </div>
+      <div class="form-group">
+        <label>Adresse Gmail *</label>
+        <input type="email" id="inp-email" placeholder="exemple@gmail.com" required/>
+      </div>
+
+      <button class="btn-pay" id="btn-pay" onclick="initierPaiement()">
+        📖 Accéder au livre gratuitement
+      </button>
+      <div class="modal-note">
+        🔒 Vos données sont protégées · Lecture en ligne uniquement
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- READER -->
+<div class="reader-overlay" id="reader-overlay">
+  <div class="reader-toolbar">
+    <div class="reader-title" id="reader-title">📖 Titre</div>
+    <div class="reader-controls">
+      <span style="font-size:.72rem; color:#706050;">Connecté : <strong id="reader-user" style="color:#c9963a;"></strong></span>
+      <span id="reader-timer" style="font-size:.72rem; color:#c9963a; letter-spacing:.05em;"></span>
+      <button class="btn-close-reader" onclick="closeReader()">✕ Fermer</button>
+    </div>
+  </div>
+  <div class="watermark">
+    <div class="watermark-text" id="watermark-text">SETONDJI Bibliothèque</div>
+  </div>
+  <div class="reader-content" id="reader-content">
+    <!-- Contenu du livre injecté ici -->
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  CONFIGURATION
+// ══════════════════════════════════════════════════════
+const CONFIG = {
+  nomBoutique:  "SETONDJI Bibliothèque",
+  emailContact: "setondjimauriac@gmail.com",
+  baseUrl: "https://setondjimauriac.github.io/ma-bibliotheque",
+};
+
+// ══════════════════════════════════════════════════════
+//  CATALOGUE DES LIVRES
+// ══════════════════════════════════════════════════════
+const LIVRES = [
+  {
+    id: "livre-001",
+    titre: "Python",
+    auteur: "Auteur à définir",
+    categorie: "Programmation",
+    description: "Apprenez Python de zéro : variables, boucles, fonctions, fichiers et projets pratiques.",
+    couleurCouverture: "#1a3a5c",
+    emoji: "🐍",
+    type: "pdf",
+    urlPdf: CONFIG.baseUrl + "/cours-python.pdf",
+    badge: "Bestseller",
+  },
+  {
+    id: "livre-002",
+    titre: "XML",
+    auteur: "Auteur à définir",
+    categorie: "Langages & Formats",
+    description: "Maîtrisez XML : structure, syntaxe, DTD, XPath, XSLT et intégration dans vos projets.",
+    couleurCouverture: "#4a1a6b",
+    emoji: "📄",
+    type: "pdf",
+    urlPdf: CONFIG.baseUrl + "/XML.pdf",
+    badge: "Nouveau",
+  },
+  {
+    id: "livre-003",
+    titre: "POO et Java",
+    auteur: "Auteur à définir",
+    categorie: "Programmation Orientée Objet",
+    description: "Programmation Orientée Objet avec Java : classes, héritage, polymorphisme, interfaces et patterns.",
+    couleurCouverture: "#1a3a1a",
+    emoji: "☕",
+    type: "pdf",
+    urlPdf: CONFIG.baseUrl + "/caca-java.pdf",
+    badge: "Populaire",
+  },
+  {
+    id: "livre-004",
+    titre: "Théorie Informatique",
+    auteur: "Auteur à définir",
+    categorie: "Informatique Théorique",
+    description: "Fondements théoriques de l'informatique : automates, langages formels, complexité et calculabilité.",
+    couleurCouverture: "#5c3a1a",
+    emoji: "🧠",
+    type: "pdf",
+    urlPdf: CONFIG.baseUrl + "/th%C3%A9orie.pdf",
+    badge: null,
+  },
+  {
+    id: "livre-005",
+    titre: "Algorithmique Avancée",
+    auteur: "Auteur à définir",
+    categorie: "Algorithmique",
+    description: "Structures de données, tri, recherche, graphes et optimisation. Le guide complet des algorithmes.",
+    couleurCouverture: "#1a2a4a",
+    emoji: "📘",
+    type: "pdf",
+    urlPdf: CONFIG.baseUrl + "/algo.pdf",
+    badge: "Avancé",
+  },
+];
+
+// ══════════════════════════════════════════════════════
+//  CONTENUS TEXTE (non utilisé — tous les livres sont PDF)
+// ══════════════════════════════════════════════════════
+const CONTENUS_LIVRES = {};
+
+// ══════════════════════════════════════════════════════
+//  ÉTAT DE L'APPLICATION
+// ══════════════════════════════════════════════════════
+let livreActif = null;
+let clientInfo = null;
+
+// Compteur de temps de lecture en cours (en ms)
+let tempsLectureDebut = null;
+let livreEnLectureId  = null;
+let intervalMinuteur  = null;
+
+// ══════════════════════════════════════════════════════
+//  SYSTÈME D'ACCÈS 24H CUMULÉES — localStorage
+//  Structure stockée pour chaque livre :
+//  {
+//    client:        { nom, prenom, email, moov },
+//    dateAchat:     timestamp ms,
+//    tempsUtilise:  ms consommés (max 86 400 000 = 24h),
+//    expireAt:      null tant que < 24h consommées
+//  }
+// ══════════════════════════════════════════════════════
+const CLE_STORAGE = 'bibliotech_acces_v2';
+const DUREE_MAX_MS = 24 * 60 * 60 * 1000; // 24h en ms
+
+function chargerAcces() {
+  try { return JSON.parse(localStorage.getItem(CLE_STORAGE) || '{}'); }
+  catch(e) { return {}; }
+}
+
+function sauvegarderAcces(data) {
+  localStorage.setItem(CLE_STORAGE, JSON.stringify(data));
+}
+
+function getAccesLivre(livreId) {
+  const tous = chargerAcces();
+  return tous[livreId] || null;
+}
+
+function aAccesValide(livreId) {
+  const acces = getAccesLivre(livreId);
+  if (!acces) return false;
+  return acces.tempsUtilise < DUREE_MAX_MS;
+}
+
+function tempsRestantMs(livreId) {
+  const acces = getAccesLivre(livreId);
+  if (!acces) return 0;
+  return Math.max(0, DUREE_MAX_MS - acces.tempsUtilise);
+}
+
+function formaterDuree(ms) {
+  if (ms <= 0) return '0h 00min';
+  const totalMin = Math.floor(ms / 60000);
+  const h   = Math.floor(totalMin / 60);
+  const min = totalMin % 60;
+  return `${h}h ${String(min).padStart(2,'0')}min`;
+}
+
+function enregistrerAccesApaiement(livreId, client) {
+  const tous = chargerAcces();
+  tous[livreId] = {
+    client,
+    dateAchat:    Date.now(),
+    tempsUtilise: 0,
+  };
+  sauvegarderAcces(tous);
+}
+
+// Démarre le compteur quand le client ouvre le livre
+function demarrerMinuteur(livreId) {
+  tempsLectureDebut = Date.now();
+  livreEnLectureId  = livreId;
+
+  // Mise à jour toutes les 30 secondes + affichage compteur
+  intervalMinuteur = setInterval(() => {
+    sauvegarderTempsEcoule(livreId);
+    mettreAJourCompteurAffichage(livreId);
+
+    // Accès expiré → fermer automatiquement
+    if (!aAccesValide(livreId)) {
+      arreterMinuteur();
+      closeReader();
+      alert('⏰ Votre accès de 24h à ce livre est terminé.\nMerci d\'avoir lu avec SETONDJI Bibliothèque !');
+      genererCatalogue();
+    }
+  }, 30000); // toutes les 30 secondes
+}
+
+// Sauvegarde le temps écoulé depuis l'ouverture
+function sauvegarderTempsEcoule(livreId) {
+  if (!tempsLectureDebut || !livreId) return;
+  const ecoule = Date.now() - tempsLectureDebut;
+  tempsLectureDebut = Date.now(); // réinitialise le point de départ
+
+  const tous = chargerAcces();
+  if (tous[livreId]) {
+    tous[livreId].tempsUtilise = Math.min(
+      DUREE_MAX_MS,
+      (tous[livreId].tempsUtilise || 0) + ecoule
+    );
+    sauvegarderAcces(tous);
+  }
+}
+
+function arreterMinuteur() {
+  if (intervalMinuteur) {
+    sauvegarderTempsEcoule(livreEnLectureId);
+    clearInterval(intervalMinuteur);
+    intervalMinuteur = null;
+  }
+  tempsLectureDebut = null;
+  livreEnLectureId  = null;
+}
+
+function mettreAJourCompteurAffichage(livreId) {
+  const restant = tempsRestantMs(livreId);
+  const el = document.getElementById('reader-timer');
+  if (el) {
+    el.textContent = `⏱ Accès restant : ${formaterDuree(restant)}`;
+    if (restant < 30 * 60000) el.style.color = '#c0392b'; // rouge si < 30min
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  GÉNÉRATION DU CATALOGUE
+// ══════════════════════════════════════════════════════
+function genererCatalogue() {
+  const grid = document.getElementById('books-grid');
+  grid.innerHTML = '';
+
+  LIVRES.forEach((livre, i) => {
+    const valide = aAccesValide(livre.id);
+    const restant = valide ? formaterDuree(tempsRestantMs(livre.id)) : null;
+    const card = document.createElement('div');
+    card.className = 'book-card';
+    card.style.animationDelay = (i * 0.05) + 's';
+    card.innerHTML = `
+      <div class="book-cover" style="background:${livre.couleurCouverture};">
+        <span style="position:relative;z-index:1;">${livre.emoji}</span>
+        <div class="book-cover-overlay"></div>
+        ${livre.badge ? `<div class="book-cover-label">${livre.badge}</div>` : ''}
+      </div>
+      <div class="book-body">
+        <div class="book-cat">${livre.categorie}</div>
+        <div class="book-title">${livre.titre}</div>
+        <div class="book-author">par ${livre.auteur}</div>
+        <div class="book-desc">${livre.description}</div>
+        ${valide ? `<div style="font-size:.65rem; color:#2d6a4f; margin-bottom:.8rem;">⏱ Accès restant : ${restant}</div>` : ''}
+        <div class="book-footer">
+          ${valide
+            ? `<button class="btn-lire" style="background:#2d6a4f;" onclick="ouvrirLivre('${livre.id}')">📖 Lire</button>`
+            : `<button class="btn-lire" onclick="ouvrirModal('${livre.id}')">Accéder →</button>`
+          }
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  MODAL PAIEMENT
+// ══════════════════════════════════════════════════════
+function ouvrirModal(livreId) {
+  livreActif = LIVRES.find(l => l.id === livreId);
+  if (!livreActif) return;
+
+  document.getElementById('modal-title').textContent = livreActif.titre;
+
+  document.getElementById('inp-nom').value = '';
+  document.getElementById('inp-prenom').value = '';
+  document.getElementById('inp-email').value = '';
+
+  const btn = document.getElementById('btn-pay');
+  btn.textContent = '📖 Accéder au livre gratuitement';
+  btn.disabled = false;
+
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  livreActif = null;
+}
+
+// Fermer modal en cliquant en dehors
+document.getElementById('modal-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ══════════════════════════════════════════════════════
+//  INITIER LE PAIEMENT (FedaPay)
+// ══════════════════════════════════════════════════════
+function initierPaiement() {
+  const nom    = document.getElementById('inp-nom').value.trim();
+  const prenom = document.getElementById('inp-prenom').value.trim();
+  const email  = document.getElementById('inp-email').value.trim();
+
+  if (!nom || !prenom || !email) {
+    alert('⚠️ Veuillez remplir tous les champs.');
+    return;
+  }
+  if (!email.includes('@')) {
+    alert('⚠️ Adresse email invalide.');
+    return;
+  }
+
+  clientInfo = { nom, prenom, email };
+
+  const btn = document.getElementById('btn-pay');
+  btn.textContent = '⏳ Ouverture en cours…';
+  btn.disabled = true;
+
+  const livreId = livreActif.id;
+  const client  = clientInfo;
+
+  setTimeout(function() {
+    enregistrerAccesApaiement(livreId, client);
+    closeModal();
+    ouvrirLivre(livreId);
+    genererCatalogue();
+  }, 800);
+}
+
+// ══════════════════════════════════════════════════════
+//  OUVRIR LE LIVRE (READER)
+// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  SÉCURISATION DES LIENS GOOGLE DRIVE
+//  Transforme n'importe quel lien Drive en lien embed sécurisé
+//  et bloque le téléchargement direct
+// ══════════════════════════════════════════════════════
+function securiserUrlGoogleDrive(url) {
+  // Extraire l'ID du fichier depuis différents formats Drive
+  let fileId = null;
+
+  const matchFile = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  const matchOpen = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+
+  if (matchFile) fileId = matchFile[1];
+  else if (matchOpen) fileId = matchOpen[1];
+  else return url;
+
+  // Google Drive Viewer : contourne le blocage iframe de Drive
+  // C'est la méthode officielle qui fonctionne dans tous les navigateurs
+  return `https://drive.google.com/file/d/${fileId}/preview`;
+}
+
+// Extrait uniquement l'ID d'un lien Google Drive
+function extraireIdDrive(url) {
+  const matchFile = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  const matchOpen = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (matchFile) return matchFile[1];
+  if (matchOpen) return matchOpen[1];
+  return '';
+}
+
+function ouvrirLivre(livreId) {
+  const livre = LIVRES.find(l => l.id === livreId);
+  if (!livre) return;
+
+  // Vérifier accès valide (24h cumulées non épuisées)
+  if (!aAccesValide(livreId)) {
+    ouvrirModal(livreId);
+    return;
+  }
+
+  const acces = getAccesLivre(livreId);
+  const infosClient = acces ? acces.client : clientInfo;
+  const nomComplet = infosClient ? `${infosClient.prenom} ${infosClient.nom}` : 'Lecteur';
+
+  document.getElementById('reader-title').textContent = `📖 ${livre.titre}`;
+  document.getElementById('reader-user').textContent = nomComplet;
+  document.getElementById('watermark-text').textContent = `${CONFIG.nomBoutique} · ${nomComplet}`;
+
+  const content = document.getElementById('reader-content');
+
+  if (livre.type === 'pdf' && livre.urlPdf) {
+
+    const pdfUrl = livre.urlPdf;
+    const encodedUrl = encodeURIComponent(pdfUrl);
+    const docsViewer = 'https://docs.google.com/gview?url=' + encodedUrl + '&embedded=true';
+
+    content.innerHTML = `
+      <div style="position:sticky;top:0;left:0;right:0;height:50px;background:#1a1408;z-index:10;border-bottom:2px solid #c9963a;display:flex;align-items:center;padding:0 1.2rem;gap:1rem;flex-shrink:0;">
+        <span style="color:#c9963a;font-family:'Playfair Display',serif;font-size:1rem;">📖 ${livre.titre}</span>
+        <span style="margin-left:auto;display:flex;gap:.6rem;align-items:center;">
+          <button onclick="basculerViewer()" style="background:#2a2010;border:1px solid #c9963a;color:#c9963a;padding:.3rem .8rem;font-size:.7rem;cursor:pointer;border-radius:3px;">🔄 Si bloqué, cliquez ici</button>
+          <span style="font-size:.62rem;color:#706050;letter-spacing:.08em;">🔒 SÉCURISÉ</span>
+        </span>
+      </div>
+      <div style="position:relative;width:100%;height:calc(100vh - 50px);">
+        <iframe id="pdf-viewer-frame" src="${pdfUrl}"
+          style="width:100%;height:100%;border:none;display:block;"
+          allowfullscreen loading="eager">
+        </iframe>
+        <div id="pdf-loader-msg" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#1a1408;z-index:2;pointer-events:none;">
+          <div style="font-size:2.5rem;margin-bottom:1rem;">📖</div>
+          <div style="color:#c9963a;font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:.5rem;">Chargement du livre…</div>
+          <div style="color:#706050;font-size:.75rem;">Patientez quelques secondes</div>
+        </div>
+      </div>
+      <div style="position:fixed;top:50px;left:0;right:0;bottom:0;z-index:5;pointer-events:none;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <div style="font-family:'Playfair Display',serif;font-size:2.5rem;color:rgba(201,150,58,0.06);transform:rotate(-35deg);white-space:nowrap;user-select:none;">${CONFIG.nomBoutique} · ${nomComplet}</div>
+      </div>
+    `;
+
+    const frame = document.getElementById('pdf-viewer-frame');
+    const loaderMsg = document.getElementById('pdf-loader-msg');
+    let viewerMode = 'direct';
+
+    frame.addEventListener('load', function() {
+      if (loaderMsg) loaderMsg.style.display = 'none';
+    });
+
+    // Bouton de secours → Google Docs Viewer
+    window.basculerViewer = function() {
+      if (loaderMsg) loaderMsg.style.display = 'flex';
+      if (viewerMode === 'direct') {
+        frame.src = docsViewer;
+        viewerMode = 'docs';
+      } else {
+        frame.src = pdfUrl;
+        viewerMode = 'direct';
+      }
+    };
+
+  } else {
+    content.innerHTML = CONTENUS_LIVRES[livreId] || '<p style="color:#fff;padding:2rem;">Contenu non disponible.</p>';
+  }
+
+  document.getElementById('reader-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // Démarrer le minuteur 24h cumulées
+  demarrerMinuteur(livreId);
+  mettreAJourCompteurAffichage(livreId);
+
+  // Bloquer raccourcis clavier
+  document.addEventListener('keydown', bloquerRaccourcis);
+}
+
+// PDF.js supprimé — lecture via Google Drive Preview (iframe)
+
+function closeReader() {
+  // Sauvegarder le temps avant de fermer
+  arreterMinuteur();
+  document.getElementById('reader-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  document.removeEventListener('keydown', bloquerRaccourcis);
+  genererCatalogue(); // Rafraîchir le temps restant affiché sur les cartes
+}
+
+// ══════════════════════════════════════════════════════
+//  SÉCURITÉ ANTI-CAPTURE
+// ══════════════════════════════════════════════════════
+
+// Bloquer clic droit (sur toute la page reader + iframe)
+document.addEventListener('contextmenu', function(e) {
+  if (document.getElementById('reader-overlay').classList.contains('open')) {
+    e.preventDefault();
+    return false;
+  }
+});
+
+// Bloquer aussi le clic droit sur l'iframe PDF quand il est chargé
+document.addEventListener('DOMContentLoaded', function() {
+  setInterval(() => {
+    const iframe = document.getElementById('pdf-iframe');
+    if (iframe) {
+      try {
+        iframe.contentDocument.addEventListener('contextmenu', e => e.preventDefault());
+      } catch(e) { /* Cross-origin : normal, les autres protections s'appliquent */ }
+    }
+  }, 2000);
+});
+
+// Bloquer raccourcis (Ctrl+S, Ctrl+P, Ctrl+C, F12, PrtSc…)
+function bloquerRaccourcis(e) {
+  const interdits = ['s','p','c','u','a','i','j'];
+  if ((e.ctrlKey || e.metaKey) && interdits.includes(e.key.toLowerCase())) {
+    e.preventDefault();
+    return false;
+  }
+  if (e.key === 'F12' || e.key === 'PrintScreen') {
+    e.preventDefault();
+    return false;
+  }
+}
+
+// Masquer contenu si fenêtre perd le focus (tentative de capture)
+document.addEventListener('visibilitychange', function() {
+  const reader = document.getElementById('reader-overlay');
+  if (reader.classList.contains('open')) {
+    reader.style.opacity = document.hidden ? '0' : '1';
+  }
+});
+
+// FedaPay supprimé — accès direct après formulaire
+
+// Sauvegarder le temps si l'utilisateur ferme l'onglet ou quitte la page
+window.addEventListener('beforeunload', function() {
+  if (livreEnLectureId) {
+    sauvegarderTempsEcoule(livreEnLectureId);
+  }
+});
+
+// ══════════════════════════════════════════════════════
+//  INITIALISATION
+// ══════════════════════════════════════════════════════
+genererCatalogue();
+
+</script>
+</body>
+</html>
